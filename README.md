@@ -22,7 +22,8 @@ Alfred preferences (including these settings) sync as one file across every Mac 
 | Computer 1 Name | Exact Mac name this row applies to. Leave blank to make this row the default (used on any computer not named in a row). |
 | Computer 1 Workspaces | VS Code Workspaces folder used on that computer. |
 | Computer 1 Allowed Projects | Optional comma separated list of top-level project/folder names to show, e.g. `mc-automation, mc-career, mc-product-*`. Supports `fnmatch` wildcards (`*`, `?`, `[seq]`). Leave empty to show everything in that computer's Workspaces folder. |
-| Computer 2 Name / Workspaces / Allowed Projects | Same, for a second computer. |
+| Computer 1 Denied Projects | Optional comma separated list to hide, even if matched by Allowed Projects, e.g. `mc-secret`. Same wildcard support. Leave empty to deny nothing. |
+| Computer 2 Name / Workspaces / Allowed Projects / Denied Projects | Same 4 fields, for a second computer. |
 
 Find your Mac's name in System Settings > General > About > Name, or run `scutil --get ComputerName` in Terminal.
 

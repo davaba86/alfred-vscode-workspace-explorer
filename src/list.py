@@ -47,13 +47,13 @@ def get_computer_name():
 
 
 def resolve_for_computer(computer_name):
-    """Pick (workspaces_home, allowed_projects) for the current Mac.
+    """Pick (workspaces_home, allowed_projects, denied_projects) for the current Mac.
 
     Two fixed computer rows are configurable (Computer 1/2 Name, Workspaces,
-    Allowed Projects). A row whose Name matches computer_name wins; a row
-    with an empty Name is the default, used when no row's name matches.
-    Alfred preferences (and these settings) sync as one file across every
-    Mac a workflow is installed on, so this lets one synced config hold
+    Allowed Projects, Denied Projects). A row whose Name matches computer_name
+    wins; a row with an empty Name is the default, used when no row's name
+    matches. Alfred preferences (and these settings) sync as one file across
+    every Mac a workflow is installed on, so this lets one synced config hold
     different values per machine instead of clobbering the setting on
     whichever machine saved last.
     """
@@ -62,25 +62,27 @@ def resolve_for_computer(computer_name):
             Tools.getEnv('computer1_name'),
             Tools.getEnv('computer1_workspaces_home'),
             Tools.getEnv('computer1_allowed_projects'),
+            Tools.getEnv('computer1_denied_projects'),
         ),
         (
             Tools.getEnv('computer2_name'),
             Tools.getEnv('computer2_workspaces_home'),
             Tools.getEnv('computer2_allowed_projects'),
+            Tools.getEnv('computer2_denied_projects'),
         ),
     ]
     computer_name_l = computer_name.lower()
     match = None
     default = None
-    for name, home, allowed in rows:
-        if not (name.strip() or home.strip() or allowed.strip()):
+    for name, home, allowed, denied in rows:
+        if not (name.strip() or home.strip() or allowed.strip() or denied.strip()):
             continue  # row left entirely blank, not in use
         if name.strip():
             if name.strip().lower() == computer_name_l:
-                match = (home, allowed)
+                match = (home, allowed, denied)
         else:
-            default = (home, allowed)
-    return match or default or (str(), str())
+            default = (home, allowed, denied)
+    return match or default or (str(), str(), str())
 
 
 Tools.logPyVersion()
@@ -89,7 +91,7 @@ f_path = Tools.getEnv('mypath')
 # TODO: Debugging line below
 Tools.log(f"this is f_path: {f_path}")
 computer_name = get_computer_name()
-resolved_home, resolved_allowed = resolve_for_computer(computer_name)
+resolved_home, resolved_allowed, resolved_denied = resolve_for_computer(computer_name)
 
 ws_home_cfg = os.path.expanduser(resolved_home or str())
 ws_home = f_path if f_path else ws_home_cfg
@@ -114,10 +116,16 @@ else:
     it = sorted(get_files(ws_home))
 
 allowed = get_allowed(resolved_allowed)
+denied = get_allowed(resolved_denied)
 if at_root and allowed:
     it = [
         i for i in it
         if any(fnmatch.fnmatch(PurePath(i).stem.lower(), pat) for pat in allowed)
+    ]
+if at_root and denied:
+    it = [
+        i for i in it
+        if not any(fnmatch.fnmatch(PurePath(i).stem.lower(), pat) for pat in denied)
     ]
 
 wf = Items()

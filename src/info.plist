@@ -427,6 +427,25 @@ Search&amp;Browser VS Code Workspaces</string>
 				<key>default</key>
 				<string></string>
 				<key>placeholder</key>
+				<string>mc-secret</string>
+				<key>required</key>
+				<false/>
+			</dict>
+			<key>description</key>
+			<string>Comma separated list of project/workspace names to HIDE on Computer 1, even if matched by Allowed Projects. Supports fnmatch wildcards (* ? [seq]). Leave empty to deny nothing.</string>
+			<key>label</key>
+			<string>Computer 1 Denied Projects</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>computer1_denied_projects</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
 				<string>home-mac</string>
 				<key>required</key>
 				<false/>
@@ -480,11 +499,30 @@ Search&amp;Browser VS Code Workspaces</string>
 			<key>variable</key>
 			<string>computer2_allowed_projects</string>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>personal-drafts</string>
+				<key>required</key>
+				<false/>
+			</dict>
+			<key>description</key>
+			<string>Comma separated list of project/workspace names to HIDE on Computer 2, even if matched by Allowed Projects. Supports fnmatch wildcards (* ? [seq]). Leave empty to deny nothing.</string>
+			<key>label</key>
+			<string>Computer 2 Denied Projects</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>computer2_denied_projects</string>
+		</dict>
 	</array>
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>2.0.0</string>
+	<string>2.1.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/davaba86/alfred-vscode-workspace-explorer</string>
 </dict>
