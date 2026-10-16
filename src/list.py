@@ -30,15 +30,17 @@ def get_dirs(r_path):
 def get_allowed(raw):
     if not raw:
         return set()
-    parts = [p.strip().lower() for chunk in raw.splitlines() for p in chunk.split(',')]
+    parts = [p.strip().lower() for chunk in raw.splitlines() for p in chunk.split(",")]
     return set(p for p in parts if p)
 
 
 def get_computer_name():
     try:
-        name = subprocess.check_output(
-            ['scutil', '--get', 'ComputerName'], stderr=subprocess.DEVNULL
-        ).decode().strip()
+        name = (
+            subprocess.check_output(["scutil", "--get", "ComputerName"], stderr=subprocess.DEVNULL)
+            .decode()
+            .strip()
+        )
         if name:
             return name
     except Exception:
@@ -59,16 +61,16 @@ def resolve_for_computer(computer_name):
     """
     rows = [
         (
-            Tools.getEnv('computer1_name'),
-            Tools.getEnv('computer1_workspaces_home'),
-            Tools.getEnv('computer1_allowed_projects'),
-            Tools.getEnv('computer1_denied_projects'),
+            Tools.getEnv("computer1_name"),
+            Tools.getEnv("computer1_workspaces_home"),
+            Tools.getEnv("computer1_allowed_projects"),
+            Tools.getEnv("computer1_denied_projects"),
         ),
         (
-            Tools.getEnv('computer2_name'),
-            Tools.getEnv('computer2_workspaces_home'),
-            Tools.getEnv('computer2_allowed_projects'),
-            Tools.getEnv('computer2_denied_projects'),
+            Tools.getEnv("computer2_name"),
+            Tools.getEnv("computer2_workspaces_home"),
+            Tools.getEnv("computer2_allowed_projects"),
+            Tools.getEnv("computer2_denied_projects"),
         ),
     ]
     computer_name_l = computer_name.lower()
@@ -87,7 +89,7 @@ def resolve_for_computer(computer_name):
 
 Tools.logPyVersion()
 
-f_path = Tools.getEnv('mypath')
+f_path = Tools.getEnv("mypath")
 # TODO: Debugging line below
 Tools.log(f"this is f_path: {f_path}")
 computer_name = get_computer_name()
@@ -104,7 +106,7 @@ if not ws_home or not os.path.isdir(ws_home):
     wf.setItem(
         title="No VS Code Workspaces configured for this computer",
         subtitle=f"Computer name: {computer_name}. Add a row for it in Configure Workflow.",
-        valid=False
+        valid=False,
     )
     wf.addItem()
     wf.write()
@@ -118,50 +120,32 @@ else:
 allowed = get_allowed(resolved_allowed)
 denied = get_allowed(resolved_denied)
 if at_root and allowed:
-    it = [
-        i for i in it
-        if any(fnmatch.fnmatch(PurePath(i).stem.lower(), pat) for pat in allowed)
-    ]
+    it = [i for i in it if any(fnmatch.fnmatch(PurePath(i).stem.lower(), pat) for pat in allowed)]
 if at_root and denied:
-    it = [
-        i for i in it
-        if not any(fnmatch.fnmatch(PurePath(i).stem.lower(), pat) for pat in denied)
-    ]
+    it = [i for i in it if not any(fnmatch.fnmatch(PurePath(i).stem.lower(), pat) for pat in denied)]
 
 wf = Items()
 if p_path:
-    wf.setItem(
-        title='Back',
-        arg=p_path
-    )
-    wf.setIcon(m_path='back.png', m_type='image')
+    wf.setItem(title="Back", arg=p_path)
+    wf.setIcon(m_path="back.png", m_type="image")
     wf.addItem()
 if len(it) > 0:
     for i in it:
         # TODO: Remove just for debugging
         pp = PurePath(i).stem.lower()
-        if (query == str() or query.lower() in PurePath(i).stem.lower()) and not(os.path.basename(i).startswith('.')):
-            ic = 'folder.png' if os.path.isdir(i) else 'workspace.png'
-            sub = 'Folder' if os.path.isdir(i) else "Workspace in VSCode"
-            title = os.path.basename(i).replace('.code-workspace', '')
-            wf.setItem(
-                title=title,
-                subtitle=f'\u23CE to open {sub}',
-                arg=i
-            )
-            wf.setIcon(m_path=ic, m_type='image')
+        if (query == str() or query.lower() in PurePath(i).stem.lower()) and not (
+            os.path.basename(i).startswith(".")
+        ):
+            ic = "folder.png" if os.path.isdir(i) else "workspace.png"
+            sub = "Folder" if os.path.isdir(i) else "Workspace in VSCode"
+            title = os.path.basename(i).replace(".code-workspace", "")
+            wf.setItem(title=title, subtitle=f"\u23ce to open {sub}", arg=i)
+            wf.setIcon(m_path=ic, m_type="image")
             wf.addItem()
-    if len(wf.getItems(response_type='dict').get('items')) == 0:
-        wf.setItem(
-            title="Search does not match a workspace",
-            subtitle="...try again",
-            valid=False
-        )
+    if len(wf.getItems(response_type="dict").get("items")) == 0:
+        wf.setItem(title="Search does not match a workspace", subtitle="...try again", valid=False)
         wf.addItem()
 else:
-    wf.setItem(
-        title="No Workspace files or Folders found",
-        valid=False
-    )
+    wf.setItem(title="No Workspace files or Folders found", valid=False)
     wf.addItem()
 wf.write()

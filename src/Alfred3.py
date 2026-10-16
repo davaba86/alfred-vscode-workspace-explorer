@@ -4,6 +4,7 @@ import json
 import os
 import sys
 import time
+
 # from plistlib import readPlist, writePlist
 from plistlib import dump, load
 
@@ -73,7 +74,8 @@ class Items(object):
 
         Args:
 
-            d_type (str, optional): defines returned object format "JSON" if it needs to be readable . Defaults to "".
+            d_type (str, optional): defines returned object format "JSON" if it needs
+                to be readable . Defaults to "".
 
         Returns:
 
@@ -222,6 +224,7 @@ class Tools(object):
 
         object (obj): Object class
     """
+
     @staticmethod
     def logPyVersion() -> None:
         """
@@ -422,7 +425,7 @@ class Tools(object):
     @staticmethod
     def getCacheDir() -> str:
         cache_dir = os.getenv("alfred_workflow_cache")
-        if not(os.path.isdir(cache_dir)):
+        if not (os.path.isdir(cache_dir)):
             os.mkdir(cache_dir)
         return cache_dir
 
@@ -504,7 +507,7 @@ class Plist:
 
 
 class Keys(object):
-    CMD = u'\u2318'
-    SHIFT = u'\u21E7'
-    ENTER = u'\u23CE'
-    ARROW_RIGHT = u'\u2192'
+    CMD = "\u2318"
+    SHIFT = "\u21e7"
+    ENTER = "\u23ce"
+    ARROW_RIGHT = "\u2192"
