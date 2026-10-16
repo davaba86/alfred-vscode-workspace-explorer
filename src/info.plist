@@ -389,12 +389,12 @@ Search&amp;Browser VS Code Workspaces</string>
 				<key>default</key>
 				<string></string>
 				<key>placeholder</key>
-				<string>mc-automation, mc-career, mc-consulting</string>
+				<string>mc-automation, mc-career, mc-product-*</string>
 				<key>required</key>
 				<false/>
 			</dict>
 			<key>description</key>
-			<string>Comma or newline separated list of top-level project/workspace names to show. Leave empty to show all (default behaviour).</string>
+			<string>Comma or newline separated list of top-level project/workspace names to show. Supports fnmatch wildcards (* ? [seq]), e.g. mc-product-*. Leave empty to show all (default behaviour).</string>
 			<key>label</key>
 			<string>Allowed Projects</string>
 			<key>type</key>

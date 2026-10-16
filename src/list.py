@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import fnmatch
 import os
 import platform
 import sys
@@ -50,7 +51,10 @@ else:
 
 allowed = get_allowed(Tools.getEnv('allowed_projects'))
 if at_root and allowed:
-    it = [i for i in it if PurePath(i).stem.lower() in allowed]
+    it = [
+        i for i in it
+        if any(fnmatch.fnmatch(PurePath(i).stem.lower(), pat) for pat in allowed)
+    ]
 
 wf = Items()
 if p_path:
