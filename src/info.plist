@@ -394,11 +394,11 @@ Search&amp;Browser VS Code Workspaces</string>
 				<false/>
 			</dict>
 			<key>description</key>
-			<string>Comma or newline separated list of top-level project/workspace names to show. Supports fnmatch wildcards (* ? [seq]), e.g. mc-product-*. Leave empty to show all (default behaviour).</string>
+			<string>Comma separated list of top-level project/workspace names to show. Supports fnmatch wildcards (* ? [seq]), e.g. mc-product-*. Leave empty to show all (default behaviour).</string>
 			<key>label</key>
 			<string>Allowed Projects</string>
 			<key>type</key>
-			<string>textview</string>
+			<string>textfield</string>
 			<key>variable</key>
 			<string>allowed_projects</string>
 		</dict>
@@ -406,7 +406,7 @@ Search&amp;Browser VS Code Workspaces</string>
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>1.1.0</string>
+	<string>1.1.1</string>
 	<key>webaddress</key>
 	<string>https://github.com/davaba86/alfred-vscode-workspace-explorer</string>
 </dict>
