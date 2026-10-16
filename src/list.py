@@ -46,30 +46,41 @@ def get_computer_name():
     return platform.node()
 
 
-def resolve_per_host(raw, computer_name):
-    """Pick a value out of a ';'-separated list of 'host: value' segments.
+def resolve_for_computer(computer_name):
+    """Pick (workspaces_home, allowed_projects) for the current Mac.
 
-    A segment without a 'host:' prefix is the default, used when no
-    segment's host matches computer_name. Lets one synced field hold
+    Two fixed computer rows are configurable (Computer 1/2 Name, Workspaces,
+    Allowed Projects). A row whose Name matches computer_name wins; a row
+    with an empty Name is the default, used when no row's name matches.
+    Alfred preferences (and these settings) sync as one file across every
+    Mac a workflow is installed on, so this lets one synced config hold
     different values per machine instead of clobbering the setting on
     whichever machine saved last.
     """
-    if not raw:
-        return raw
-    segments = [s.strip() for s in raw.split(';') if s.strip()]
-    if not segments:
-        return raw
-    host_match = None
-    default = None
+    rows = [
+        (
+            Tools.getEnv('computer1_name'),
+            Tools.getEnv('computer1_workspaces_home'),
+            Tools.getEnv('computer1_allowed_projects'),
+        ),
+        (
+            Tools.getEnv('computer2_name'),
+            Tools.getEnv('computer2_workspaces_home'),
+            Tools.getEnv('computer2_allowed_projects'),
+        ),
+    ]
     computer_name_l = computer_name.lower()
-    for seg in segments:
-        if ':' in seg:
-            host, value = seg.split(':', 1)
-            if host.strip().lower() == computer_name_l:
-                host_match = value.strip()
+    match = None
+    default = None
+    for name, home, allowed in rows:
+        if not (name.strip() or home.strip() or allowed.strip()):
+            continue  # row left entirely blank, not in use
+        if name.strip():
+            if name.strip().lower() == computer_name_l:
+                match = (home, allowed)
         else:
-            default = seg
-    return host_match if host_match is not None else default
+            default = (home, allowed)
+    return match or default or (str(), str())
 
 
 Tools.logPyVersion()
@@ -78,20 +89,31 @@ f_path = Tools.getEnv('mypath')
 # TODO: Debugging line below
 Tools.log(f"this is f_path: {f_path}")
 computer_name = get_computer_name()
+resolved_home, resolved_allowed = resolve_for_computer(computer_name)
 
-resolved_home = resolve_per_host(Tools.getEnv('workspaces_home'), computer_name)
 ws_home_cfg = os.path.expanduser(resolved_home or str())
 ws_home = f_path if f_path else ws_home_cfg
 at_root = (not f_path) or (os.path.normpath(f_path) == os.path.normpath(ws_home_cfg))
 p_path = str(PurePath(f_path).parent) if f_path and not at_root else str()
 
 query = Tools.getArgv(1)
+if not ws_home or not os.path.isdir(ws_home):
+    wf = Items()
+    wf.setItem(
+        title="No VS Code Workspaces configured for this computer",
+        subtitle=f"Computer name: {computer_name}. Add a row for it in Configure Workflow.",
+        valid=False
+    )
+    wf.addItem()
+    wf.write()
+    sys.exit()
+
 if query == str():
     it = sorted(get_dirs(ws_home))
 else:
     it = sorted(get_files(ws_home))
 
-allowed = get_allowed(resolve_per_host(Tools.getEnv('allowed_projects'), computer_name))
+allowed = get_allowed(resolved_allowed)
 if at_root and allowed:
     it = [
         i for i in it
