@@ -97,7 +97,7 @@
 		</array>
 	</dict>
 	<key>createdby</key>
-	<string>Acidham</string>
+	<string>David Abarca (forked from Acidham)</string>
 	<key>description</key>
 	<string>Open VSCode Workspace</string>
 	<key>disabled</key>
@@ -383,12 +383,31 @@ Search&amp;Browser VS Code Workspaces</string>
 			<key>variable</key>
 			<string>workspaces_home</string>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>mc-automation, mc-career, mc-consulting</string>
+				<key>required</key>
+				<false/>
+			</dict>
+			<key>description</key>
+			<string>Comma or newline separated list of top-level project/workspace names to show. Leave empty to show all (default behaviour).</string>
+			<key>label</key>
+			<string>Allowed Projects</string>
+			<key>type</key>
+			<string>textview</string>
+			<key>variable</key>
+			<string>allowed_projects</string>
+		</dict>
 	</array>
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>1.0.0</string>
+	<string>1.1.0</string>
 	<key>webaddress</key>
-	<string></string>
+	<string>https://github.com/davaba86/alfred-vscode-workspace-explorer</string>
 </dict>
 </plist>
