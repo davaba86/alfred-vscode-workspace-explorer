@@ -1,0 +1,43 @@
+name: Release on tag
+
+# Safety net: release.sh already creates a Release for tags it pushes, but
+# any tag pushed another way (manually, by hand) would otherwise sit as a
+# bare tag with no Release. This fires on every vX.Y.Z tag push and backfills
+# a Release if one isn't already there — idempotent, so it no-ops when
+# release.sh (or a prior run of this workflow) already created one.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  backfill-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release for $tag already exists, nothing to do."
+            exit 0
+          fi
+
+          prev_tag="$(git tag --sort=-creatordate | grep -v "^${tag}\$" | head -n1 || true)"
+          notes="$(git log ${prev_tag:+${prev_tag}..}"$tag" --pretty=format:'- %s' --no-merges)"
+          [ -z "$notes" ] && notes="Release $tag."
+
+          assets=()
+          [ -f "VSCode Workspace Explorer.alfredworkflow" ] && assets+=("VSCode Workspace Explorer.alfredworkflow")
+          [ -f "vs.alfredworkflow" ] && assets+=("vs.alfredworkflow")
+
+          gh release create "$tag" "${assets[@]}" --title "$tag" --notes "$notes"
