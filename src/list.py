@@ -3,6 +3,7 @@
 import fnmatch
 import os
 import platform
+import subprocess
 import sys
 from pathlib import PurePath
 
@@ -33,15 +34,56 @@ def get_allowed(raw):
     return set(p for p in parts if p)
 
 
+def get_computer_name():
+    try:
+        name = subprocess.check_output(
+            ['scutil', '--get', 'ComputerName'], stderr=subprocess.DEVNULL
+        ).decode().strip()
+        if name:
+            return name
+    except Exception:
+        pass
+    return platform.node()
+
+
+def resolve_per_host(raw, computer_name):
+    """Pick a value out of a ';'-separated list of 'host: value' segments.
+
+    A segment without a 'host:' prefix is the default, used when no
+    segment's host matches computer_name. Lets one synced field hold
+    different values per machine instead of clobbering the setting on
+    whichever machine saved last.
+    """
+    if not raw:
+        return raw
+    segments = [s.strip() for s in raw.split(';') if s.strip()]
+    if not segments:
+        return raw
+    host_match = None
+    default = None
+    computer_name_l = computer_name.lower()
+    for seg in segments:
+        if ':' in seg:
+            host, value = seg.split(':', 1)
+            if host.strip().lower() == computer_name_l:
+                host_match = value.strip()
+        else:
+            default = seg
+    return host_match if host_match is not None else default
+
+
 Tools.logPyVersion()
 
 f_path = Tools.getEnv('mypath')
 # TODO: Debugging line below
 Tools.log(f"this is f_path: {f_path}")
-ws_home_cfg = os.path.expanduser(Tools.getEnv('workspaces_home'))
+computer_name = get_computer_name()
+
+resolved_home = resolve_per_host(Tools.getEnv('workspaces_home'), computer_name)
+ws_home_cfg = os.path.expanduser(resolved_home or str())
 ws_home = f_path if f_path else ws_home_cfg
-p_path = str(PurePath(f_path).parent) if f_path and f_path != Tools.getEnv('workspaces_home') else str()
 at_root = (not f_path) or (os.path.normpath(f_path) == os.path.normpath(ws_home_cfg))
+p_path = str(PurePath(f_path).parent) if f_path and not at_root else str()
 
 query = Tools.getArgv(1)
 if query == str():
@@ -49,7 +91,7 @@ if query == str():
 else:
     it = sorted(get_files(ws_home))
 
-allowed = get_allowed(Tools.getEnv('allowed_projects'))
+allowed = get_allowed(resolve_per_host(Tools.getEnv('allowed_projects'), computer_name))
 if at_root and allowed:
     it = [
         i for i in it

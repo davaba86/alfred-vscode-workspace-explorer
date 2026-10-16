@@ -20,3 +20,23 @@ Define path (`workspaces_home`) where VSCode workspaces are stored. The workflow
 Set `workspaces_home` e.g. to /Users/user/vscode-workspaces
 
 Optionally set `Allowed Projects` to a comma separated list of top-level project/folder names (e.g. `mc-automation, mc-career, mc-product-*`). Entries support `fnmatch` wildcards (`*`, `?`, `[seq]`), so `mc-product-*` matches `mc-product-compass-flow`, `mc-product-fluent-steps`, etc. Only matching entries show up in the top-level list; leave empty to show everything in `workspaces_home` (original behaviour). Filtering applies only at the top level, not to subfolders inside an allowed project.
+
+### Per-computer settings
+
+Alfred preferences (including these settings) sync as one file across every Mac they're installed on (e.g. via Dropbox/iCloud). If your Macs need different values, both `VS Code Workspaces` and `Allowed Projects` support per-computer overrides in the same field:
+
+```
+ComputerName: value-for-that-computer; OtherComputerName: value-for-that-one
+```
+
+- Segments are separated by `;`.
+- A segment with no `ComputerName:` prefix is the default, used on any computer not explicitly listed.
+- Find your Mac's name in System Settings > General > About > Name, or run `scutil --get ComputerName` in Terminal.
+
+Example `Allowed Projects`:
+
+```
+mc-automation; work-mbp: mc-product-*, mc-career; home-mac: personal-*
+```
+
+This shows only `mc-automation` on any unlisted computer, `mc-product-*`/`mc-career` on `work-mbp`, and `personal-*` on `home-mac`. If you don't need per-computer overrides, just use a plain value as before, no `;` or `:` needed.

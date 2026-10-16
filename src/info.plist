@@ -375,7 +375,7 @@ Search&amp;Browser VS Code Workspaces</string>
 				<true/>
 			</dict>
 			<key>description</key>
-			<string>Viscual Studio Code Workspace Folder</string>
+			<string>Viscual Studio Code Workspace Folder. For per-computer paths (e.g. when this is synced to multiple Macs), use 'ComputerName: /path; OtherComputerName: /other/path'. A segment with no 'ComputerName:' prefix is the default when none match. Find your Mac's name in System Settings &gt; General &gt; About &gt; Name, or run `scutil --get ComputerName`.</string>
 			<key>label</key>
 			<string>VS Code Workspaces</string>
 			<key>type</key>
@@ -394,7 +394,7 @@ Search&amp;Browser VS Code Workspaces</string>
 				<false/>
 			</dict>
 			<key>description</key>
-			<string>Comma separated list of top-level project/workspace names to show. Supports fnmatch wildcards (* ? [seq]), e.g. mc-product-*. Leave empty to show all (default behaviour).</string>
+			<string>Comma separated list of top-level project/workspace names to show. Supports fnmatch wildcards (* ? [seq]), e.g. mc-product-*. For per-computer lists, use 'ComputerName: pat1, pat2; OtherComputerName: pat3'. A segment with no 'ComputerName:' prefix is the default when none match. Leave empty to show all (default behaviour).</string>
 			<key>label</key>
 			<string>Allowed Projects</string>
 			<key>type</key>
@@ -406,7 +406,7 @@ Search&amp;Browser VS Code Workspaces</string>
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>1.1.2</string>
+	<string>1.2.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/davaba86/alfred-vscode-workspace-explorer</string>
 </dict>
