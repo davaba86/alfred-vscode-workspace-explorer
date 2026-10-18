@@ -109,17 +109,23 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>openwith</key>
-				<string>/Applications/Visual Studio Code.app</string>
-				<key>sourcefile</key>
-				<string>{var:mypath}</string>
+				<key>concurrently</key>
+				<false/>
+				<key>script</key>
+				<string>open -a "Visual Studio Code" "{var:mypath}"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.openfile</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>69ED09D1-D034-4CEE-8A72-742ADCC2F5DB</string>
 			<key>version</key>
-			<integer>3</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -306,58 +312,58 @@ Search&amp;Browser VS Code Workspaces</string>
 		<key>1E4C47DC-9E0D-4CA7-9C58-BDBCAEBAFD19</key>
 		<dict>
 			<key>xpos</key>
-			<real>540</real>
+			<integer>540</integer>
 			<key>ypos</key>
-			<real>115</real>
+			<integer>115</integer>
 		</dict>
 		<key>69ED09D1-D034-4CEE-8A72-742ADCC2F5DB</key>
 		<dict>
 			<key>xpos</key>
-			<real>835</real>
+			<integer>835</integer>
 			<key>ypos</key>
-			<real>45</real>
+			<integer>45</integer>
 		</dict>
 		<key>6D127197-9285-4404-AEBE-1F4D32B3B721</key>
 		<dict>
 			<key>xpos</key>
-			<real>75</real>
+			<integer>75</integer>
 			<key>ypos</key>
-			<real>120</real>
+			<integer>120</integer>
 		</dict>
 		<key>6DBBB615-498F-4D84-9571-CB42B2B6718A</key>
 		<dict>
 			<key>xpos</key>
-			<real>705</real>
+			<integer>705</integer>
 			<key>ypos</key>
-			<real>135</real>
+			<integer>135</integer>
 		</dict>
 		<key>72D88578-E25F-46FB-A5F2-C8DDFDAAF29A</key>
 		<dict>
 			<key>xpos</key>
-			<real>275</real>
+			<integer>275</integer>
 			<key>ypos</key>
-			<real>120</real>
+			<integer>120</integer>
 		</dict>
 		<key>F0F34B2F-091A-49DB-9E4D-B5D867B31A9E</key>
 		<dict>
 			<key>xpos</key>
-			<real>540</real>
+			<integer>540</integer>
 			<key>ypos</key>
-			<real>290</real>
+			<integer>290</integer>
 		</dict>
 		<key>F6A299C3-A9B5-447F-8280-A0F821D0C66D</key>
 		<dict>
 			<key>xpos</key>
-			<real>835</real>
+			<integer>835</integer>
 			<key>ypos</key>
-			<real>175</real>
+			<integer>175</integer>
 		</dict>
 		<key>FAB606CA-AF3E-4839-83BB-64BE1710BF6E</key>
 		<dict>
 			<key>xpos</key>
-			<real>470</real>
+			<integer>470</integer>
 			<key>ypos</key>
-			<real>145</real>
+			<integer>145</integer>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
