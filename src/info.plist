@@ -112,7 +112,7 @@
 				<key>concurrently</key>
 				<false/>
 				<key>script</key>
-				<string>open -a "Visual Studio Code" "{var:mypath}"</string>
+				<string>open -a "Visual Studio Code" "$mypath"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
