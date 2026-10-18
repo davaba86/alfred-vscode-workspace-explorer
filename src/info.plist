@@ -519,6 +519,25 @@ Search&amp;Browser VS Code Workspaces</string>
 			<string>computer2_denied_projects</string>
 		</dict>
 	</array>
+	<key>variables</key>
+	<dict>
+		<key>computer1_allowed_projects</key>
+		<string></string>
+		<key>computer1_denied_projects</key>
+		<string></string>
+		<key>computer1_name</key>
+		<string></string>
+		<key>computer1_workspaces_home</key>
+		<string>~/git-repos</string>
+		<key>computer2_allowed_projects</key>
+		<string></string>
+		<key>computer2_denied_projects</key>
+		<string></string>
+		<key>computer2_name</key>
+		<string></string>
+		<key>computer2_workspaces_home</key>
+		<string></string>
+	</dict>
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
