@@ -5,6 +5,10 @@ on:
     branches: [master]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -17,6 +21,12 @@ jobs:
         with:
           python-version: "3.11"
       - uses: pre-commit/action@v3.0.1
+      - name: Notify Discord on failure
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_CICD_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"content\": \"**CI failed** on \`alfred-vscode-workspace-explorer\`\nBranch: \`${{ github.ref_name }}\`\nCommit: \`${{ github.sha }}\`\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
 
   release:
     needs: pre-commit
@@ -29,3 +39,9 @@ jobs:
       - run: ./scripts/release.sh
         env:
           GH_TOKEN: ${{ github.token }}
+      - name: Notify Discord on failure
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_CICD_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"content\": \"**CI failed** on \`alfred-vscode-workspace-explorer\`\nBranch: \`${{ github.ref_name }}\`\nCommit: \`${{ github.sha }}\`\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
