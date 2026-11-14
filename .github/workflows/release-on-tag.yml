@@ -11,6 +11,10 @@ on:
     tags:
       - "v*.*.*"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -41,3 +45,9 @@ jobs:
           [ -f "vs.alfredworkflow" ] && assets+=("vs.alfredworkflow")
 
           gh release create "$tag" "${assets[@]}" --title "$tag" --notes "$notes"
+      - name: Notify Discord on failure
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_CICD_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"content\": \"**Release on tag failed** on \`alfred-vscode-workspace-explorer\`\nBranch: \`${{ github.ref_name }}\`\nCommit: \`${{ github.sha }}\`\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
